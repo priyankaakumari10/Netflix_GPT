@@ -1,8 +1,11 @@
 import React, { useRef, useState } from 'react'
 import Header from './Header'
 import checkValidData from '../utils/validate';
-import { createUserWithEmailAndPassword , signInWithEmailAndPassword} from "firebase/auth";
+import { createUserWithEmailAndPassword , signInWithEmailAndPassword, updateProfile} from "firebase/auth";
 import { auth } from "../utils/firebase";
+import { useNavigate } from 'react-router-dom';
+import { addUser } from '../utils/userSlice';
+import { useDispatch } from 'react-redux';
 // here either we can access each input using useState or we can use useRef
 
 const Login = () => {
@@ -10,24 +13,32 @@ const Login = () => {
   const [errorMsg,setErrorMsg]=useState(null);
   const email = useRef(null);
   const password = useRef(null);
+  const name =useRef(null);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handButtonClick = ()  => {
-   
-    // const emaill=email.current.value;
-    // const passwaord=password.current.value;
     const msg= checkValidData(email.current.value,password.current.value)
     setErrorMsg(msg);
     if(msg){
       return;
     }
-    // sign up /sign in logic
-    if(!isSignInForm){
-      
+    // SignUp Logic
+    if(!isSignInForm){  
       createUserWithEmailAndPassword(auth,email.current.value,password.current.value)
       .then((userCredential) => {
-        // Signed in 
         const user = userCredential.user;
+
+        updateProfile(user,{
+          displayName:name.current.value,
+          photoURL:""
+        }).then(()=>{
+          const{uid,email,displayName} = auth.currentUser;
+          dispatch(addUser({uid:uid,email:email,displayName:displayName}));
+          navigate('/browse')
+        })
         console.log(user);
+        
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -37,11 +48,11 @@ const Login = () => {
         setErrorMsg("user already registered " ); 
       });
     }else{
-      // sign in logic
+      // SignIn Logic
       signInWithEmailAndPassword(auth,email.current.value,password.current.value)
       .then((userCredential) =>{
-        // Signed in 
         const user = userCredential.user;
+        navigate('/browse')
         console.log(user);
       })
       .catch(()=>{
