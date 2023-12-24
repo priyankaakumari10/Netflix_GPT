@@ -3,7 +3,6 @@ import Header from './Header'
 import checkValidData from '../utils/validate';
 import { createUserWithEmailAndPassword , signInWithEmailAndPassword, updateProfile} from "firebase/auth";
 import { auth } from "../utils/firebase";
-import { useNavigate } from 'react-router-dom';
 import { addUser } from '../utils/userSlice';
 import { useDispatch } from 'react-redux';
 // here either we can access each input using useState or we can use useRef
@@ -14,7 +13,6 @@ const Login = () => {
   const email = useRef(null);
   const password = useRef(null);
   const name =useRef(null);
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handButtonClick = ()  => {
@@ -35,16 +33,14 @@ const Login = () => {
         }).then(()=>{
           const{uid,email,displayName} = auth.currentUser;
           dispatch(addUser({uid:uid,email:email,displayName:displayName}));
-          navigate('/browse')
         })
-        console.log(user);
         
       })
       .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode);
-        console.log(errorMessage);
+        // const errorCode = error.code;
+        // const errorMessage = error.message;
+        // console.log(errorCode);
+        // console.log(errorMessage);
         setErrorMsg("user already registered " ); 
       });
     }else{
@@ -52,12 +48,10 @@ const Login = () => {
       signInWithEmailAndPassword(auth,email.current.value,password.current.value)
       .then((userCredential) =>{
         const user = userCredential.user;
-        navigate('/browse')
-        console.log(user);
       })
       .catch(()=>{
         setErrorMsg("Invalid Email or Password");
-      })
+      });
 
     }
 
