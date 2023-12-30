@@ -10,20 +10,31 @@ import { useDispatch } from 'react-redux';
 const Login = () => {
   const [isSignInForm, setIsSignInForm] = useState(true);
   const [errorMsg,setErrorMsg]=useState(null);
+
+  const dispatch = useDispatch();
+
   const email = useRef(null);
   const password = useRef(null);
   const name =useRef(null);
-  const dispatch = useDispatch();
 
-  const handButtonClick = ()  => {
-    const msg= checkValidData(email.current.value,password.current.value)
+  const handButtonClick = (e)  => {
+    const msg= checkValidData(
+      email.current.value,
+      password.current.value
+      )
+
     setErrorMsg(msg);
     if(msg){
       return;
     }
     // SignUp Logic
     if(!isSignInForm){  
-      createUserWithEmailAndPassword(auth,email.current.value,password.current.value)
+      createUserWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value
+        )
+
       .then((userCredential) => {
         const user = userCredential.user;
 
@@ -32,8 +43,9 @@ const Login = () => {
           photoURL:""
         }).then(()=>{
           const{uid,email,displayName} = auth.currentUser;
-          dispatch(addUser({uid:uid,email:email,displayName:displayName}));
-        })
+          dispatch(addUser({uid:uid,email:email,displayName:displayName
+          }));
+        });
         
       })
       .catch((error) => {
@@ -62,8 +74,9 @@ const Login = () => {
 
   return (
     <div>
+              <Header />
+
       <div className=" absolute">
-        <Header />
         <img
           src="https://assets.nflxext.com/ffe/siteui/vlv3/c906271d-7184-4eec-83c9-b6d4c1a068ec/728874a6-eeda-400a-9bcf-a935a1408a4f/IN-en-20231127-popsignuptwoweeks-perspective_alpha_website_large.jpg"
           alt="logo"
@@ -90,11 +103,19 @@ const Login = () => {
         />
         <p className='text-red-500 font-bold text-lg py-2'>{errorMsg}</p>
         <button className='p-4 my-4 bg-red-700 w-full rounded-md' onClick={handButtonClick}>{isSignInForm ? "Sign In" : "Sign up"}</button>
-        {isSignInForm ?
-          <p className='py-4 cursor-pointer' onClick={toggleSignInForm}>New to Netflix ?<span className='text-blue-500'>Sign Up Now</span></p>
-          : <p className='py-4 cursor-pointer' onClick={toggleSignInForm}>already Sign up<span className='text-blue-500'>Sign In Now</span></p>
-
-        }
+        <p className="py-2 text-sm cursor-pointer" onClick={toggleSignInForm}>
+          {isSignInForm ? (
+            <div>
+              New to Netflix?{" "}
+              <span className="text-red-600 font-semibold"> Sign Up Now!</span>
+            </div>
+          ) : (
+            <div>
+              Already an User?{" "}
+              <span className="text-red-600 font-semibold"> Sign In Now!</span>
+            </div>
+          )}
+        </p>
       </form>
     </div>
   )
