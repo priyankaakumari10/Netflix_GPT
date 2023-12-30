@@ -1,13 +1,17 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 const VideoTitle = ({title,overview}) => {
+   const videotrailer =()=>{
+    
+   }
   return (
-    <div className =' w-screen aspect-video pt-[20%] px-24 absolute text-white bg-gradient-to-r from-black '>
-        <h1 className='text-6xl font-bold '>{title}</h1>
-        <p className='py-6 text-lg w-1/4 '>{overview}</p>
-        <div className=" space-x-2">
-            <button className=' bg-white text-black p-4 px-12 text-lg rounded-md hover:bg-opacity-50'>PLay</button>
-            <button className='bg-gray-600 text-black p-4 px-12 text-lg rounded-md'>More Info</button>
+    <div className='aspect-video w-full absolute text-white bg-gradient-to-r from-slate-950'>
+        <h1 className=' text-2xl mt-16 md:mt-52 md:text-5xl md:mx-32 mx-8 font-bold '>{title}</h1>
+        <p className=' hidden md:inline-block my-16 mx-32 text-xl w-1/2 h-auto max-w-[40%] '>{overview}</p>
+        <div className=' md:mx-32 mx-8 my-20 md:my-0 text-sm md:text-lg text-white'>
+            <button onClick={videotrailer}className='bg-white  md:mt-0 text-black py-2 px-4 rounded-md hover:bg-opacity-70'>▶️ Play</button>
+            <button className='ml-4 bg-white text-black py-2 px-4 rounded-md hover:bg-opacity-70 '>More info</button>
         </div>
     </div>
   )
