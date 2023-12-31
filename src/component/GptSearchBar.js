@@ -17,6 +17,7 @@ const GptSearchBar = () => {
           className='py-2 px-4 m-4 bg-white text-red-600 rounded-lg col-span-3 font-medium'>
           {lang[langKey].search}
         </button>
+        
       </form>
     </div>
   )
