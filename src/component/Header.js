@@ -23,7 +23,7 @@ const Header = () => {
   };
 
   const user = useSelector((store) => store.user);
-  const GptSearch = useSelector((store) => store.gptSearch);
+  const showGptSearch = useSelector((store) => store.gptSearch);
   const userName = user?.displayName;
 
   useEffect(() => {
@@ -60,9 +60,9 @@ const handleLanguageChange=(e)=>{
 
   const renderDropdown = () => {
     return (
-      <select className="px-3" onChange={handleLanguageChange}>
+      showGptSearch && (<select className="px-3" onChange={handleLanguageChange}>
        {SUPPORTED_LANGUAGES.map( lang=><option key={lang.identifier}value={lang.identifier}>{lang.name}</option>)} 
-      </select>
+      </select>)
     );
   };
 
@@ -81,7 +81,7 @@ const handleLanguageChange=(e)=>{
               onClick={handleGptSearchClick}
               className="text-white mx-auto md:mx-9 bg-red-600 rounded-md md:mr-4 px-5 py-2 my-6 md:my-0 md:px-7"
             >
-              {GptSearch ? 'Home' : 'GPT Search'}
+              {showGptSearch ? 'Home' : 'GPT Search'}
             </button>
             <img alt="user icon" src={USER_AVATAR} className="w-12 h-12" />
             <button className="font-bold text-lg text-white" onClick={handleSignOut}>
